@@ -1,4 +1,5 @@
-#include <stdio>#include <stdio.h>
+#include <stdio>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -26,16 +27,43 @@ int main(int argc, int **argv)
 		printf("Could not change to directory: %s", directory);
 	}
 	
-	//get socket
-	int sockFD = socket(AF_INET, SOCK_STREAM, 0);
-	struck sockaddr_in address;
-	memset(&address, 0, sizeof(address));
-	address.sin_family = AF_INET;
-	address.sin_port = htons(port);
-	address.sin_addr.s_addr = INADDR_ANY;
-	bind(sockFD, (struck sockaddr*) &address, sizeof(address));
-	int value = 1;
-	setsockopt(sockFD, SOL_SOCKET, SOLSO_REUSEADDR, &value, sizeof(value));
-	listen(sockFD, 1);
+    //get socket
+    int sockFD = socket(AF_INET, SOCK_STREAM, 0);
+    struck sockaddr_in address;
+    memset(&address, 0, sizeof(address));
+    address.sin_family = AF_INET;
+    address.sin_port = htons(port);
+    address.sin_addr.s_addr = INADDR_ANY;
+    //bind socket
+    bind(sockFD, (struck sockaddr*) &address, sizeof(address));
+    int value = 1;
+    //allows port reuse
+    setsockopt(sockFD, SOL_SOCKET, SOLSO_REUSEADDR, &value, sizeof(value));
+    //begins listening
+    listen(sockFD, 1);
 
-}
+    while()
+    {
+        //accept connection
+        struct sockaddr_storage otherAddress;
+        socklen_t otherSize = sizeof(otherAddress);
+        int otherSocket = accept(socketFD, (struct sockaddr*) &otherAddress, &otherSize);
+
+        //successful conection accept
+        if(otherSocket > 0)
+        {
+            char request [1024];
+            int contentLength = read(sockFD, request, 1024);
+            if(strncmp(request, "GET", 3))
+            {
+
+            }
+            else if(strncmp(request, "HEAD", 4))
+            {
+
+            }
+
+            close(sockFD);
+        }
+    }
+    
