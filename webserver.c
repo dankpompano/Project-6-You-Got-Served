@@ -71,7 +71,19 @@ int main(int argc, int **argv)
                     strcat(path, "index.html");
                 if(path[0] == '/')
                     ++realPath;
+                int openFD = open(realPath);
+                
+                if(openFD != -1){
+                    //writes the content type and content length. MUST SUPPORT
+                   write(otherSocket, "HTTP/1.0 200 OK\r\n", realPath); //passes in the buffer. realPath or request? 
+                   write(otherSocket, contentType(), realPath); //content type. Need a function.
+                   write(otherSocket, ""); //content length.
+                }
 
+                else{
+                    write(otherSocket, "HTTP/1.1 404 Not Found\r\n", realPath);
+                }
+                
                 if(!strcmp(command, "GET"))
                 {
                     
@@ -92,5 +104,11 @@ int main(int argc, int **argv)
 
 	
 	
+
+}
+
+char* contentType(char* content)
+{
+    
 
 }
