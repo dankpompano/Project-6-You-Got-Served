@@ -1,3 +1,11 @@
+/*******************************
+ *
+ *  Project Name: Project 6: You Got Served
+ *  Description: Creation of a webserver. This project allows for the user to input thier client, webserver, port, command, and requests.
+ *  Date: Friday, April 19, 2024
+ *  Authors: Joel Justice and Jacob Littler
+ *
+ *******************************/
 #include <stdio>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,17 +23,20 @@ int main(int argc, int **argv)
 	char directory[1024] = argv[2];
 	
 	//ERROR CASES
-	if(argc != 3){
+	if(argc != 3)
+	{
 		printf("Usage: ./server <port> <path to root>");
         return -1;
 	}
 	
-	else if(port < 1024 || port > 65535){
+	else if(port < 1024 || port > 65535)
+	{
 		printf("Bad port: %d", port);
         return -2;
 	}
 	
-	else if(chdir(directory) == -1){
+	else if(chdir(directory) == -1)
+	{
 		printf("Could not change to directory: %s", directory);
         return -3;
 	}
@@ -73,42 +84,64 @@ int main(int argc, int **argv)
                     ++realPath;
                 int openFD = open(realPath);
                 
-                if(openFD != -1){
+                if(openFD != -1)
+                {
                     //writes the content type and content length. MUST SUPPORT
-                   write(otherSocket, "HTTP/1.0 200 OK\r\n", realPath); //passes in the buffer. realPath or request? 
+                   char* pathLength = "HTTP/1.0 200 OK\r\n";
+                   write(otherSocket, strlen(pathLength), realPath); //passes in the buffer. realPath or request? 
                    write(otherSocket, contentType(), realPath); //content type. Need a function.
-                   write(otherSocket, ""); //content length.
-                }
+                   write(otherSocket, strlen(pathlength)); //content length.
+                   
+		            if(!strcmp(command, "GET"))
+		            {
+		                
+						return 
+		            }
+		            
+		            if(!strcmp(command, "HEAD"))
+		            {
+		            	
+		            	return 
+		            }
+		            
+		        }
 
-                else{
+                else
+                {
                     write(otherSocket, "HTTP/1.1 404 Not Found\r\n", realPath);
                 }
                 
-                if(!strcmp(command, "GET"))
-                {
-                    
-
-                }
+                
             }
             
-            
-
             close(otherSocket);
         }
     }
-    
-    
-
-
-
-
-	
-	
+    	
 
 }
 
-char* contentType(char* content)
+char* contentType(char* content) //path .com, .net
 {
-    
+//we are searching from the back in order to find the period. this will tell us what file type it is AFTER we find the period. 
+	char* type = strrchr(content, '.');
+	char* stringCPY = strcpy(string,type);
+	char* shift period = 
+	
+	if(strcmp(type, "html") == 0)
+	{
+		
+	}
+	char* type;
+    if(strcmp("html", content) == 0)
+    {
+    	type = "text/html";
+    }
 
 }
+
+int contentLength(char* content)
+{
+	return strlen(content);
+}
+
