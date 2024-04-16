@@ -82,7 +82,7 @@ int main(int argc, int **argv)
                     strcat(path, "index.html");
                 if(path[0] == '/')
                     ++realPath;
-                int openFD = open(realPath);
+                int openFD = open(realPath, O_RDONLY);
                 
                 if(openFD != -1)
                 {
@@ -125,26 +125,28 @@ char* contentType(char* content) //path .com, .net
 {
 //we are searching from the back in order to find the period. this will tell us what file type it is AFTER we find the period. 
 	char* type = strrchr(content, '.');
-	char* output;
-    
+	
+    if(type == NULL)
+        return NULL;
 	if(!strcmp(type, ".html") || !strcmp(type, ".htm"))
-		strcpy(output, "text/html");
+		return "text/html";
     else if(!strcmp(type, ".jpg") || !strcmp(type, ".jpeg"))
-        strcpy(output, "image/jpeg");
+        return "image/jpeg";
     else if(!strcmp(type, ".gif"))
-        strcpy(output, "image/gif");
+        return "image/gif";
     else if(!strcmp(type, ".png"))
-        strcpy(output, "image/png");
+        return "image/png";
     else if(!strcmp(type, ".txt") || !strcmp(type, ".c") || !strcmp(type, ".h"))
-        strcpy(output, "text/plain");
+        return "text/plain";
     else if(!strcmp(type, ".pdf"))
-        strcpy(output, "application/pdf");
+        return "application/pdf";
     else
-        strcpy(output, "no Content-Type");
-	return output;
+        return NULL;
 }
 
-int contentLength(char* content)
+long contentLength(char* content)
 {
-	return strlen(content);
+	struct stat buf;
+    stat(content, &buf);
+    return buf.st_size;
 }
