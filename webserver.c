@@ -17,6 +17,9 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
+char* contentType(char* content);
+long contentLength(char* content);
+
 int main(int argc, int **argv)
 {
 	int port = argv[1];
