@@ -87,10 +87,10 @@ int main(int argc, int **argv)
                 if(openFD != -1)
                 {
                     //writes the content type and content length. MUST SUPPORT
-                   char* pathLength = "HTTP/1.0 200 OK\r\n";
-                   write(otherSocket, strlen(pathLength), realPath); //passes in the buffer. realPath or request? 
-                   write(otherSocket, contentType(), realPath); //content type. Need a function.
-                   write(otherSocket, strlen(pathlength)); //content length.
+                    char* pathLength = "HTTP/1.0 200 OK\r\n";
+                    write(otherSocket, strlen(pathLength), realPath); //passes in the buffer. realPath or request? 
+                    write(otherSocket, contentType(), realPath); //content type. Need a function.
+                    write(otherSocket, strlen(pathlength)); //content length.
                    
 		            if(!strcmp(command, "GET"))
 		            {
@@ -125,23 +125,26 @@ char* contentType(char* content) //path .com, .net
 {
 //we are searching from the back in order to find the period. this will tell us what file type it is AFTER we find the period. 
 	char* type = strrchr(content, '.');
-	char* stringCPY = strcpy(string,type);
-	char* shift period = 
-	
-	if(strcmp(type, "html") == 0)
-	{
-		
-	}
-	char* type;
-    if(strcmp("html", content) == 0)
-    {
-    	type = "text/html";
-    }
-
+	char* output;
+    
+	if(!strcmp(type, ".html") || !strcmp(type, ".htm"))
+		strcpy(output, "text/html");
+    else if(!strcmp(type, ".jpg") || !strcmp(type, ".jpeg"))
+        strcpy(output, "image/jpeg");
+    else if(!strcmp(type, ".gif"))
+        strcpy(output, "image/gif");
+    else if(!strcmp(type, ".png"))
+        strcpy(output, "image/png");
+    else if(!strcmp(type, ".txt") || !strcmp(type, ".c") || !strcmp(type, ".h"))
+        strcpy(output, "text/plain");
+    else if(!strcmp(type, ".pdf"))
+        strcpy(output, "application/pdf");
+    else
+        strcpy(output, "no Content-Type");
+	return output;
 }
 
 int contentLength(char* content)
 {
 	return strlen(content);
 }
-
