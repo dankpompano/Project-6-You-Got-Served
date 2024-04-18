@@ -132,7 +132,27 @@ int main(int argc, char **argv)
                     write(otherSocket, error, strlen(error));
                     if(!strcmp(command, "GET"))
                     {
-                        //make file, write 404 error to it, read from file, write it
+                        //makefile, write 404 error to it, read from file, write it
+                        int errorFD = open("error.html", O_WRONLY | O_CREAT);
+                        if(errorFD != -1)
+                        {
+                            char errorMessage[1024];
+                            sprintf(errorMessage, "<HTML><HEAD><TITLE>404 Not Found</TITLE></HEAD><BODY<H1>Not found</H1><P>The requested URL %s was not found on this server.</P></BODY></HTML>", path);
+                            write(errorFD, errorMessage, strlen(errorMessage));
+
+                            //might have to do it over again
+                            char errorBuffer[1024];
+                            //tells us number of bytes read
+                            bytes = read(errorFD, errorBuffer, sizeof(errorBuffer));
+                            //while the number of bytes read is not 0
+                            while(bytes > 0)
+                            {
+                                write(otherSocket, errorBuffer, bytes);
+                                bytes = read(errorFD, errorBuffer, sizeof(errorBuffer));
+                            }
+
+                        }
+                            
                     }
                 }
             }
