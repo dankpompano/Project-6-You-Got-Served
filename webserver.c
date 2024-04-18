@@ -132,7 +132,7 @@ int main(int argc, char **argv)
                     write(otherSocket, error, strlen(error));
                     if(!strcmp(command, "GET"))
                     {
-                        //send html page with 404 error
+                        //make file, write 404 error to it, read from file, write it
                     }
                 }
             }
