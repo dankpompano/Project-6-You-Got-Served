@@ -35,13 +35,14 @@ int main(int argc, char **argv)
 	
 	//ERROR CASES
 	
-	
+	//invaid port
 	if(port < 1024 || port > 65535)
 	{
 		printf("Bad port: %d\n", port);
         return -2;
 	}
 	
+    //cannot change directory
 	else if(chdir(directory) == -1)
 	{
 		printf("Could not change to directory: %s\n", directory);
@@ -128,31 +129,14 @@ int main(int argc, char **argv)
 		        }
                 else
                 {
-                    char* error = "HTTP/1.1 404 Not Found\r\n";
+                    char* error = "HTTP/1.1 404 Not Found\r\n\r\n";
                     write(otherSocket, error, strlen(error));
                     if(!strcmp(command, "GET"))
                     {
-                        //makefile, write 404 error to it, read from file, write it
-                        int errorFD = open("error.html", O_WRONLY | O_CREAT);
-                        if(errorFD != -1)
-                        {
-                            char errorMessage[1024];
-                            sprintf(errorMessage, "<HTML><HEAD><TITLE>404 Not Found</TITLE></HEAD><BODY<H1>Not found</H1><P>The requested URL %s was not found on this server.</P></BODY></HTML>", path);
-                            write(errorFD, errorMessage, strlen(errorMessage));
-
-                            //might have to do it over again
-                            char errorBuffer[1024];
-                            //tells us number of bytes read
-                            bytes = read(errorFD, errorBuffer, sizeof(errorBuffer));
-                            //while the number of bytes read is not 0
-                            while(bytes > 0)
-                            {
-                                write(otherSocket, errorBuffer, bytes);
-                                bytes = read(errorFD, errorBuffer, sizeof(errorBuffer));
-                            }
-
-                        }
-                            
+                        //write error message HTML to server is they requested the webpage
+                        char errorMessage[1024];
+                        sprintf(errorMessage, "<HTML><HEAD><TITLE>404 Not Found</TITLE></HEAD><BODY><H1>Not found</H1><P>The requested URL %s was not found on this server.</P></BODY></HTML>", realPath);
+                        write(otherSocket, errorMessage, strlen(errorMessage));
                     }
                 }
             }
